@@ -25,7 +25,7 @@ This document outlines the steps to build the Conscience Agent application.
 2.  **Main Loop:** Create the main application loop to process tasks.
 3.  **User Interaction:** Implement user prompts and feedback.
 
-Phase 4: Modern desktop interface
+## Phase 4: Modern desktop interface
 
 1. GUI Framework Selection: Research and select a suitable cross-platform GUI framework (e.g., PyQt, PySide, Kivy) for the desktop application. 
 2. UI/UX Design: Create mockups and wireframes for the user interface, focusing on displaying the agent's thought process (Proposer, Governor, Executor steps) in a clear and intuitive way. 
