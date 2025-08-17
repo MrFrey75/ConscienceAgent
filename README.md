@@ -43,6 +43,11 @@ This repository contains extensive documentation for different audiences. Find t
     ```bash
     ./dist/ConscienceAgent
     ```
+    or    
+
+    ```bash
+    . .venv/bin/activate && python3 src/gui.py
+    ```
 3.  **Follow the User Guide:** For detailed instructions, please see the [**`USER_GUIDE.md`**](./USER_GUIDE.md).
 
 ### Contributing
