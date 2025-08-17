@@ -20,3 +20,12 @@ def list_directory(path):
     List the files and directories in a path.
     """
     return os.listdir(path)
+
+import shutil
+
+def remove_directory(path):
+    """
+    Remove a directory.
+    """
+    shutil.rmtree(path)
+

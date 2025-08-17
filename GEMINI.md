@@ -2,9 +2,9 @@ Of course. Here is the `GEMINI.md` file, created from the documents you provided
 
 ***
 
-# Using the Conscience Agent with Gemini CLI
+# Using the Conscience Agent for Development
 
-Welcome, developer. This guide provides a tailored overview for using the Conscience Agent within the Gemini CLI.
+Welcome, developer. This guide provides a tailored overview for using the Conscience Agent's core logic.
 
 ### The Core Concept: Safe, Auditable AI
 
@@ -14,7 +14,7 @@ This structure ensures that no accidental or harmful actions can be taken, makin
 
 ---
 
-### The Research Workflow: From Broad Question to Focused Answer
+### The Development Workflow: From Broad Question to Focused Answer
 
 Your primary role is to act as the lead researcher, guiding the agent's focus. The most effective way to work with the agent is through an iterative cycle of inquiry.
 
@@ -22,17 +22,7 @@ Your primary role is to act as the lead researcher, guiding the agent's focus. T
 2.  **Phase 2: Deep Dive:** Use the insights from the exploration phase to ask more specific, targeted questions.
 3.  **Phase 3: Synthesis:** Once you have gathered sufficient detailed information, instruct the agent to consolidate its findings into a cohesive report.
 
-This methodical process transforms the `scratch/` directory into your centralized research hub and results in a well-supported final document.
-
----
-
-### Conserving Usage: A Note on Efficiency
-
-To ensure you do not exhaust your usage allowance, it is crucial to use the agent efficiently. The key is to minimize wasted cycles on overly broad or ambiguous tasks.
-
-* **Think Before You Task:** The more focused your initial prompt, the more efficient the agent will be.
-* **Leverage the Iterative Cycle:** Do not ask the agent to write a complete, multi-topic report in a single command. Use the **Explore -> Deep Dive -> Synthesize** workflow.
-* **Start Small:** Begin with a simple exploration to map the territory.
+This methodical process allows you to leverage the agent's tools to build a comprehensive understanding of a topic or codebase.
 
 ---
 

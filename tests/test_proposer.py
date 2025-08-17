@@ -13,21 +13,35 @@ class TestProposer(unittest.TestCase):
 
     def test_propose_search(self):
         task = "what is the history of artificial intelligence?"
-        action = self.proposer.propose_action(task)
-        self.assertEqual(action['action'], 'search_web')
-        self.assertEqual(action['args'], [task])
+        actions = self.proposer.propose_action(task)
+        self.assertEqual(actions[0]['action'], 'search_web')
+        self.assertEqual(actions[0]['args'], [task])
 
     def test_propose_list_files(self):
         task = "list files in the current directory"
-        action = self.proposer.propose_action(task)
-        self.assertEqual(action['action'], 'list_directory')
-        self.assertEqual(action['args'], ['.'])
+        actions = self.proposer.propose_action(task)
+        self.assertEqual(actions[0]['action'], 'list_directory')
+        self.assertEqual(actions[0]['args'], ['.'])
 
     def test_propose_write_file(self):
         task = "write a file"
-        action = self.proposer.propose_action(task)
-        self.assertEqual(action['action'], 'write_file')
-        self.assertEqual(action['args'], ['test.txt', 'hello world'])
+        actions = self.proposer.propose_action(task)
+        self.assertEqual(actions[0]['action'], 'write_file')
+        self.assertEqual(actions[0]['args'], ['test.txt', 'hello world'])
+
+    def test_propose_doc(self):
+        task = "doc"
+        actions = self.proposer.propose_action(task)
+        self.assertEqual(actions[0]['action'], 'open_file')
+        self.assertEqual(actions[0]['args'], ['USER_GUIDE.md'])
+
+    def test_propose_clean(self):
+        task = "clean"
+        actions = self.proposer.propose_action(task)
+        self.assertEqual(actions[0]['action'], 'remove_directory')
+        self.assertEqual(actions[0]['args'], ['dist'])
+        self.assertEqual(actions[1]['action'], 'remove_directory')
+        self.assertEqual(actions[1]['args'], ['build'])
 
 if __name__ == '__main__':
     unittest.main()

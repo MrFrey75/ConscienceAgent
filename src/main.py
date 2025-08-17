@@ -3,8 +3,9 @@ from proposer import Proposer
 from governor import Governor
 from executor import Executor
 from logger import setup_logger
-from tools.file_system import read_file, write_file, list_directory
+from tools.file_system import read_file, write_file, list_directory, remove_directory
 from tools.web_search import search_web
+from tools.system import open_file
 
 def main():
     """
@@ -25,6 +26,8 @@ def main():
         "write_file": write_file,
         "list_directory": list_directory,
         "search_web": search_web,
+        "open_file": open_file,
+        "remove_directory": remove_directory,
     }
     executor = Executor(tools)
 
@@ -32,19 +35,20 @@ def main():
     logger.info(f"Received task: {task}")
     print(f"Received task: {task}")
 
-    action = proposer.propose_action(task)
-    logger.info(f"Proposed action: {action}")
-    print(f"Proposed action: {action}")
+    actions = proposer.propose_action(task)
+    logger.info(f"Proposed actions: {actions}")
+    print(f"Proposed actions: {actions}")
 
-    if governor.approve_action(action):
-        logger.info(f"Action approved: {action}")
-        print(f"Action approved: {action}")
-        result = executor.execute_action(action)
-        logger.info(f"Action result: {result}")
-        print(f"Action result: {result}")
-    else:
-        logger.warning(f"Action denied: {action}")
-        print(f"Action denied: {action}")
+    for action in actions:
+        if governor.approve_action(action):
+            logger.info(f"Action approved: {action}")
+            print(f"Action approved: {action}")
+            result = executor.execute_action(action)
+            logger.info(f"Action result: {result}")
+            print(f"Action result: {result}")
+        else:
+            logger.warning(f"Action denied: {action}")
+            print(f"Action denied: {action}")
 
     logger.info("Conscience Agent finished task.")
 

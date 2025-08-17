@@ -10,8 +10,38 @@ from PySide6.QtCore import QDir, QThread, Signal, QObject
 
 # Import agent components
 from main import Proposer, Governor, Executor
-from tools.file_system import read_file, write_file, list_directory
+from tools.file_system import read_file, write_file, list_directory, remove_directory
 from tools.web_search import search_web
+from tools.system import open_file
+from persona import PersonaManager
+import subprocess
+
+class TestWorker(QObject):
+    """
+    Worker thread for running tests.
+    """
+    log_message = Signal(str)
+    task_finished = Signal()
+
+    def run(self):
+        """Runs the test suite and captures the output."""
+        try:
+            process = subprocess.Popen(
+                ["python3", "-m", "unittest", "discover", "tests"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            stdout, stderr = process.communicate()
+
+            if process.returncode == 0:
+                self.log_message.emit(f"<font color='green'><b>Tests Passed!</b></font><br>{stderr}")
+            else:
+                self.log_message.emit(f"<font color='red'><b>Tests Failed!</b></font><br>{stderr}")
+        except Exception as e:
+            self.log_message.emit(f"<font color='red'><b>Error running tests:</b></font><br>{e}")
+        finally:
+            self.task_finished.emit()
 
 class AgentWorker(QObject):
     """
@@ -28,7 +58,8 @@ class AgentWorker(QObject):
 
     def run(self):
         """Execute the agent's task."""
-        self.log_message.emit("Starting agent...")
+        persona = PersonaManager()
+        self.log_message.emit(persona.get_message("starting_task", task=self.task))
 
         proposer = Proposer()
         governor = Governor("constitution.yaml")
@@ -37,26 +68,33 @@ class AgentWorker(QObject):
             "write_file": write_file,
             "list_directory": list_directory,
             "search_web": search_web,
+            "open_file": open_file,
+            "remove_directory": remove_directory,
         }
         executor = Executor(tools)
 
         if not self._is_running:
-            self.log_message.emit("Agent stopped before starting.")
+            self.log_message.emit(persona.get_message("task_stopped"))
             self.task_finished.emit()
             return
 
-        action = proposer.propose_action(self.task)
-        self.log_message.emit(f"Proposer suggests: {action}")
+        actions = proposer.propose_action(self.task)
+        for action in actions:
+            if not self._is_running:
+                self.log_message.emit(persona.get_message("task_stopped"))
+                break
 
-        if self._is_running and governor.approve_action(action):
-            self.log_message.emit(f"Governor approves: {action}")
-            if self._is_running:
-                result = executor.execute_action(action)
-                self.log_message.emit(f"Executor result: {result}")
-        elif self._is_running:
-            self.log_message.emit(f"Governor denies: {action}")
+            self.log_message.emit(persona.get_message("proposing_action", action=action.get("action"), args=action.get("args")))
 
-        self.log_message.emit("Agent task complete.")
+            if self._is_running and governor.approve_action(action):
+                self.log_message.emit(persona.get_message("approving_action", action=action.get("action")))
+                if self._is_running:
+                    result = executor.execute_action(action)
+                    self.log_message.emit(persona.get_message("action_result", result=result))
+            elif self._is_running:
+                self.log_message.emit(persona.get_message("denying_action", action=action.get("action")))
+
+        self.log_message.emit(persona.get_message("task_complete"))
         self.task_finished.emit()
 
     def stop(self):
@@ -100,6 +138,18 @@ class MainWindow(QMainWindow):
         save_constitution_button.clicked.connect(self.save_constitution)
         constitution_layout.addWidget(save_constitution_button)
 
+        # Persona Editor Tab
+        persona_tab = QWidget()
+        left_pane.addTab(persona_tab, "Persona Editor")
+
+        persona_layout = QVBoxLayout(persona_tab)
+        self.persona_editor = QTextEdit()
+        persona_layout.addWidget(self.persona_editor)
+
+        save_persona_button = QPushButton("Save Persona")
+        save_persona_button.clicked.connect(self.save_persona)
+        persona_layout.addWidget(save_persona_button)
+
         # Documentation Tab
         docs_tab = QWidget()
         left_pane.addTab(docs_tab, "Documentation")
@@ -125,9 +175,11 @@ class MainWindow(QMainWindow):
         button_layout = QHBoxLayout()
         self.run_button = QPushButton("Run Task")
         self.stop_button = QPushButton("Stop Task")
+        self.test_button = QPushButton("Run Tests")
         self.stop_button.setEnabled(False)
         button_layout.addWidget(self.run_button)
         button_layout.addWidget(self.stop_button)
+        button_layout.addWidget(self.test_button)
         right_layout.addLayout(button_layout)
 
         # Log Viewer
@@ -138,9 +190,11 @@ class MainWindow(QMainWindow):
         # Event Connections
         self.run_button.clicked.connect(self.run_task)
         self.stop_button.clicked.connect(self.stop_task)
+        self.test_button.clicked.connect(self.run_tests)
 
         # Initial setup
         self.load_constitution()
+        self.load_persona()
         self.load_documentation_files()
 
     def load_documentation_files(self):
@@ -185,6 +239,30 @@ class MainWindow(QMainWindow):
 
         self.agent_thread.start()
 
+    def run_tests(self):
+        """Runs the test suite in a background thread."""
+        self.log("--- Running tests... ---")
+        self.run_button.setEnabled(False)
+        self.stop_button.setEnabled(False)
+        self.test_button.setEnabled(False)
+
+        self.test_thread = QThread()
+        self.test_worker = TestWorker()
+        self.test_worker.moveToThread(self.test_thread)
+
+        self.test_worker.log_message.connect(self.log)
+        self.test_worker.task_finished.connect(self.test_done)
+        self.test_thread.started.connect(self.test_worker.run)
+
+        self.test_thread.start()
+
+    def test_done(self):
+        """Cleans up after tests are finished."""
+        self.run_button.setEnabled(True)
+        self.test_button.setEnabled(True)
+        self.test_thread.quit()
+        self.test_thread.wait()
+
     def stop_task(self):
         """Stops the agent thread."""
         if hasattr(self, 'agent_worker'):
@@ -219,6 +297,23 @@ class MainWindow(QMainWindow):
             self.log("Constitution saved successfully.")
         except Exception as e:
             self.log(f"Error saving constitution: {e}")
+
+    def load_persona(self):
+        """Loads the content of persona.yaml into the editor."""
+        try:
+            with open("persona.yaml", "r") as f:
+                self.persona_editor.setPlainText(f.read())
+        except FileNotFoundError:
+            self.log("ERROR: persona.yaml not found.")
+
+    def save_persona(self):
+        """Saves the content of the editor to persona.yaml."""
+        try:
+            with open("persona.yaml", "w") as f:
+                f.write(self.persona_editor.toPlainText())
+            self.log("Persona saved successfully.")
+        except Exception as e:
+            self.log(f"Error saving persona: {e}")
 
     def log(self, message):
         """Appends a message to the log viewer."""

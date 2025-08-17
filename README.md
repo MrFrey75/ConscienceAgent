@@ -38,17 +38,17 @@ This repository contains extensive documentation for different audiences. Find t
 
 ### Quick Start
 
-1.  **Download the application:** Find the latest release in the `dist/` directory.
+1.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 2.  **Run the application:**
     ```bash
-    ./dist/ConscienceAgent
-    ```
-    or    
-
-    ```bash
-    . .venv/bin/activate && python3 src/gui.py
+    python3 src/gui.py
     ```
 3.  **Follow the User Guide:** For detailed instructions, please see the [**`USER_GUIDE.md`**](./USER_GUIDE.md).
+
+You can also build a distributable application using a tool like PyInstaller.
 
 ### Contributing
 
@@ -57,6 +57,12 @@ This is an open-source experiment, and contributions are welcome! Whether you ha
 ### Testing
 
 To run the tests, use the following command:
+
+```bash
+./run_tests.sh
+```
+
+Alternatively, you can run the tests manually:
 
 ```bash
 python3 -m unittest discover tests

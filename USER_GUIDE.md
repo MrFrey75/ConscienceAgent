@@ -22,10 +22,11 @@ The user interface is divided into two main sections: a control pane on the left
 
 #### Left Pane: Controls & Configuration
 
-This pane contains two tabs:
+This pane contains three tabs:
 
 1.  **File Explorer:** This tab shows a live tree view of the project's directory. You can use it to see the files the agent creates or modifies in real-time.
 2.  **Constitution Editor:** This tab displays the contents of `constitution.yaml`. You can edit the agent's rules directly in this text box. Click the **"Save Constitution"** button to apply your changes.
+3.  **Documentation:** This tab allows you to view all the markdown documentation files associated with the project.
 
 #### Right Pane: Task & Agent Output
 
@@ -35,7 +36,7 @@ This is where you will interact with the agent.
 2.  **Control Buttons:**
     *   **Run Task:** Starts the agent with the task from the input field.
     *   **Stop Task:** Becomes active when a task is running. Click it to stop the agent's current task.
-3.  **Log Viewer:** This large, read-only area displays the agent's thought process in real-time. To make it easy to follow, messages are color-coded:
+3.  **Log Viewer:** This large, read-only area displays the agent's thought process in real-time. The agent can now perform multi-step tasks, and you can observe each step in the log. To make it easy to follow, messages are color-coded:
     *   **System Messages:** General messages about the agent's state.
     *   **Proposer:** The agent's proposed actions.
     *   **Governor:** Green for approved actions, red for denied actions.
@@ -48,3 +49,13 @@ This is where you will interact with the agent.
 3.  Observe the agent's thought process in the **Log Viewer**.
 4.  View any created or modified files in the **File Explorer**.
 5.  If needed, modify the agent's rules in the **Constitution Editor** and save them for the next run.
+
+### Available Commands
+
+You can enter the following commands into the task input field for quick actions:
+
+*   `doc`: Opens the `USER_GUIDE.md` file in your default application.
+*   `clean`: Removes the `dist` and `build` directories.
+*   `list files`: Lists the files in the current directory.
+*   `list files and read readme`: Lists the files and then reads the `README.md` file.
+*   `what is the history of artificial intelligence?`: Performs a web search for the given query.

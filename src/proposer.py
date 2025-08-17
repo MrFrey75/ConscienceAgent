@@ -9,12 +9,21 @@ class Proposer:
 
     def propose_action(self, task):
         """
-        Propose an action based on the given task.
+        Propose a sequence of actions based on the given task.
         """
-        # This is a placeholder implementation.
-        if "history of artificial intelligence" in task:
-            return {"action": "search_web", "args": [task]}
+        actions = []
+        if "list files and read readme" in task:
+            actions.append({"action": "list_directory", "args": ["."]})
+            actions.append({"action": "read_file", "args": ["README.md"]})
+        elif "history of artificial intelligence" in task:
+            actions.append({"action": "search_web", "args": [task]})
         elif "list files" in task:
-            return {"action": "list_directory", "args": ["."]}
+            actions.append({"action": "list_directory", "args": ["."]})
+        elif "doc" in task:
+            actions.append({"action": "open_file", "args": ["USER_GUIDE.md"]})
+        elif "clean" in task:
+            actions.append({"action": "remove_directory", "args": ["dist"]})
+            actions.append({"action": "remove_directory", "args": ["build"]})
         else:
-            return {"action": "write_file", "args": ["test.txt", "hello world"]}
+            actions.append({"action": "write_file", "args": ["test.txt", "hello world"]})
+        return actions

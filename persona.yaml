@@ -1,0 +1,21 @@
+# Persona Configuration for the Conscience Agent
+
+# This file defines the "voice" of the agent. You can edit these templates
+# to change how the agent communicates its actions and results.
+
+# --- Message Templates ---
+# Variables available:
+# {task} - The user's original task.
+# {action} - The action being performed (e.g., "read_file").
+# {args} - The arguments for the action (e.g., "['README.md']").
+# {result} - The result of an executed action.
+
+starting_task: "Alright, I'm starting on your task: '{task}'."
+proposing_action: "My next step is to `{action}` with these arguments: {args}."
+approving_action: "Looks good. I've approved the action: `{action}`."
+denying_action: "I can't do that. I've denied the action `{action}` because it goes against my rules."
+executing_action: "Okay, I'm performing the action: `{action}`."
+action_result: "I'm done with that step. Here's the result: {result}."
+task_complete: "I've finished the task."
+task_stopped: "You've stopped the task. I'll clean up now."
+error: "I've run into an error: {error}"
