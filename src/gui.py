@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QTabWidget, QTextEdit, QLineEdit, QPushButton, QTreeView, QFileSystemModel,
-    QListWidget
+    QListWidget, QStatusBar
 )
 import os
 import glob
@@ -187,6 +187,11 @@ class MainWindow(QMainWindow):
         self.log_viewer.setReadOnly(True)
         right_layout.addWidget(self.log_viewer)
 
+        # Status Bar
+        self.status_bar = QStatusBar()
+        self.setStatusBar(self.status_bar)
+        self.status_bar.showMessage("Ready")
+
         # Event Connections
         self.run_button.clicked.connect(self.run_task)
         self.stop_button.clicked.connect(self.stop_task)
@@ -226,6 +231,7 @@ class MainWindow(QMainWindow):
         self.log(f"--- Starting task: {task} ---")
         self.run_button.setEnabled(False)
         self.stop_button.setEnabled(True)
+        self.status_bar.showMessage("Running task...")
 
         # Create and start the agent thread
         self.agent_thread = QThread()
@@ -245,6 +251,7 @@ class MainWindow(QMainWindow):
         self.run_button.setEnabled(False)
         self.stop_button.setEnabled(False)
         self.test_button.setEnabled(False)
+        self.status_bar.showMessage("Running tests...")
 
         self.test_thread = QThread()
         self.test_worker = TestWorker()
@@ -260,6 +267,7 @@ class MainWindow(QMainWindow):
         """Cleans up after tests are finished."""
         self.run_button.setEnabled(True)
         self.test_button.setEnabled(True)
+        self.status_bar.showMessage("Tests finished")
         self.test_thread.quit()
         self.test_thread.wait()
 
@@ -271,12 +279,14 @@ class MainWindow(QMainWindow):
             self.agent_thread.quit()
             self.agent_thread.wait()
         self.log("--- Task stopped by user ---")
+        self.status_bar.showMessage("Task stopped")
         self.task_done()
 
     def task_done(self):
         """Cleans up after a task is finished or stopped."""
         self.run_button.setEnabled(True)
         self.stop_button.setEnabled(False)
+        self.status_bar.showMessage("Ready")
         if hasattr(self, 'agent_thread'):
             self.agent_thread.quit()
             self.agent_thread.wait()
@@ -295,8 +305,10 @@ class MainWindow(QMainWindow):
             with open("constitution.yaml", "w") as f:
                 f.write(self.constitution_editor.toPlainText())
             self.log("Constitution saved successfully.")
+            self.status_bar.showMessage("Constitution saved", 2000) # Show for 2 seconds
         except Exception as e:
             self.log(f"Error saving constitution: {e}")
+            self.status_bar.showMessage("Error saving constitution", 2000)
 
     def load_persona(self):
         """Loads the content of persona.yaml into the editor."""
@@ -312,8 +324,10 @@ class MainWindow(QMainWindow):
             with open("persona.yaml", "w") as f:
                 f.write(self.persona_editor.toPlainText())
             self.log("Persona saved successfully.")
+            self.status_bar.showMessage("Persona saved", 2000) # Show for 2 seconds
         except Exception as e:
             self.log(f"Error saving persona: {e}")
+            self.status_bar.showMessage("Error saving persona", 2000)
 
     def log(self, message):
         """Appends a message to the log viewer."""
