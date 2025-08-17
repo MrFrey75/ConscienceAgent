@@ -10,6 +10,10 @@ To start the application, run the executable file located in the `dist` director
 ./dist/ConscienceAgent
 ```
 
+```bash
+. .venv/bin/activate && python3 src/gui.py
+```
+
 ### The Main Window
 
 The user interface is divided into two main sections: a control pane on the left and the main interaction pane on the right.

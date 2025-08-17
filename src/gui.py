@@ -1,8 +1,11 @@
 import sys
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QTabWidget, QTextEdit, QLineEdit, QPushButton, QTreeView, QFileSystemModel
+    QTabWidget, QTextEdit, QLineEdit, QPushButton, QTreeView, QFileSystemModel,
+    QListWidget
 )
+import os
+import glob
 from PySide6.QtCore import QDir, QThread, Signal, QObject
 
 # Import agent components
@@ -97,6 +100,17 @@ class MainWindow(QMainWindow):
         save_constitution_button.clicked.connect(self.save_constitution)
         constitution_layout.addWidget(save_constitution_button)
 
+        # Documentation Tab
+        docs_tab = QWidget()
+        left_pane.addTab(docs_tab, "Documentation")
+        docs_layout = QHBoxLayout(docs_tab)
+        self.doc_list = QListWidget()
+        self.doc_viewer = QTextEdit()
+        self.doc_viewer.setReadOnly(True)
+        docs_layout.addWidget(self.doc_list, 1)
+        docs_layout.addWidget(self.doc_viewer, 2)
+        self.doc_list.itemSelectionChanged.connect(self.display_documentation)
+
         # --- Right Pane: Main Interaction ---
         right_pane = QWidget()
         main_layout.addWidget(right_pane, 2) # 2/3 of the width
@@ -127,6 +141,26 @@ class MainWindow(QMainWindow):
 
         # Initial setup
         self.load_constitution()
+        self.load_documentation_files()
+
+    def load_documentation_files(self):
+        """Finds all .md files and adds them to the documentation list."""
+        try:
+            markdown_files = glob.glob("*.md")
+            self.doc_list.addItems(markdown_files)
+        except Exception as e:
+            self.log(f"Error loading documentation files: {e}")
+
+    def display_documentation(self):
+        """Displays the content of the selected documentation file."""
+        try:
+            selected_item = self.doc_list.currentItem()
+            if selected_item:
+                file_path = selected_item.text()
+                with open(file_path, "r") as f:
+                    self.doc_viewer.setPlainText(f.read())
+        except Exception as e:
+            self.log(f"Error displaying documentation: {e}")
 
     def run_task(self):
         """Starts the agent in a background thread."""
