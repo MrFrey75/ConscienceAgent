@@ -1,0 +1,3 @@
+allowed_actions:
+  - search_web
+  - list_directory

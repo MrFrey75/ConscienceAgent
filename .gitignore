@@ -1,0 +1,15 @@
+# Virtual Environment
+.venv/
+venv/
+__pycache__/
+
+# IDE
+.idea/
+
+# Build artifacts
+dist/
+build/
+*.spec
+
+# Logs
+*.log

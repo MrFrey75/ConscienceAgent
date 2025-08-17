@@ -1,0 +1,5 @@
+allowed_actions:
+  - search_web
+  - read_file
+  - write_file
+  - list_directory
