@@ -1,5 +1,7 @@
 # Development Plan
 
+*Note: This document outlines the original development plan for the command-line version of the Conscience Agent. For information on the GUI, please see the source code in `src/gui.py`.*
+
 This document outlines the steps to build the Conscience Agent application.
 
 ## Phase 1: Core Framework

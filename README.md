@@ -22,33 +22,28 @@ This design makes the agent's behavior auditable, controllable, and transparent 
 
 This repository contains extensive documentation for different audiences. Find the guide that's right for you.
 
-* **For a Quick Overview (Non-Technical):**
+* **For Users:**
+    * [**`USER_GUIDE.md`**](./USER_GUIDE.md) — Your primary guide to installing and using the desktop application.
     * [**`SIMPLE_EXPLANATION.md`**](./SIMPLE_EXPLANATION.md) — Understand the project's core concepts through simple analogies.
 
-* **For Users and Researchers:**
+* **For Researchers:**
     * [**`RESEARCH_GUIDE.md`**](./RESEARCH_GUIDE.md) — Learn the workflow and strategies for using the agent as a powerful research assistant.
 
 * **For Developers:**
-    * [**`GEMINI.md`**](./GEMINI.md) — A guide for developers using the agent within the Gemini CLI.
-    * [**`DEV_PLAN.md`**](./DEV_PLAN.md) — The development plan for the Conscience Agent.
+    * [**`DEV_PLAN.md`**](./DEV_PLAN.md) — The development plan that was followed to build the agent.
+    * [**`GEMINI.md`**](./GEMINI.md) — A guide for developers using the agent's core logic.
 
 * **For Ethicists and Philosophers:**
     * [**`ETHICS.md`**](./ETHICS.md) — An exploration of the philosophical and ethical principles behind the agent's design.
 
 ### Quick Start
 
-1.  **Clone the repository:**
+1.  **Download the application:** Find the latest release in the `dist/` directory.
+2.  **Run the application:**
     ```bash
-    git clone https://github.com/fray/conscience_agent.git
+    ./dist/ConscienceAgent
     ```
-2.  **Navigate to the project directory:**
-    ```bash
-    cd conscience_agent
-    ```
-3.  **Start a chat with the agent:**
-    ```bash
-    gemini chat
-    ```
+3.  **Follow the User Guide:** For detailed instructions, please see the [**`USER_GUIDE.md`**](./USER_GUIDE.md).
 
 ### Contributing
 
