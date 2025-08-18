@@ -31,10 +31,14 @@ This repository contains extensive documentation for different audiences. Find t
 
 * **For Developers:**
     * [**`DEV_PLAN.md`**](./docs/DEV_PLAN.md) — The development plan that was followed to build the agent.
-    * [**`GEMINI.md`**](./docs/GEMINI.md) — A guide for developers using the agent's core logic.
+    * [**`DEV_GUIDE.md`**](./docs/DEV_GUIDE.md) — The development plan that was followed to build the agent.
+    * [**`DEVELOPMENT_PLAN.md`**](./docs/DEVELOPMENT_PLAN.md) — The development plan that was followed to build the agent.
 
 * **For Ethicists and Philosophers:**
     * [**`ETHICS.md`**](./docs/ETHICS.md) — An exploration of the philosophical and ethical principles behind the agent's design.
+
+* **For GEMINI CLI or other AI Agents and LLMS:**
+    * [**'GEMINI.md'**](./GEMINI.md) - general instructions for GEMINI CLI when doing generative code creation and development.
 
 ### Quick Start
 
